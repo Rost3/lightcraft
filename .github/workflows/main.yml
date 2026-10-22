@@ -1,0 +1,31 @@
+
+name: Build LightCraft for Windows
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Get LightCraft source
+        uses: actions/checkout@v4
+        with:
+          repository: storytold/lightcraft
+          ref: fe7a76813e8a718307c1d2b7bd5bfca016929ab7
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build LightCraft
+        run: cargo build --release -p lightcraft
+
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: LightCraft-Windows
+          path: target/release/lightcraft.exe
